@@ -12,20 +12,20 @@
 
 ActiveRecord::Schema[7.1].define(version: 2024_04_13_140732) do
   create_table "foods", force: :cascade do |t|
-    t.integer "resturant_id", null: false
+    t.integer "restaurant_id", null: false
     t.string "name", null: false
     t.integer "price", null: false
     t.text "description", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["resturant_id"], name: "index_foods_on_resturant_id"
+    t.index ["restaurant_id"], name: "index_foods_on_restaurant_id"
   end
 
   create_table "line_foods", force: :cascade do |t|
     t.integer "food_id", null: false
     t.integer "restaurant_id", null: false
     t.integer "order_id"
-    t.integer "count", null: false
+    t.integer "count", default: 0, null: false
     t.boolean "active", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -43,12 +43,12 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_13_140732) do
   create_table "restaurants", force: :cascade do |t|
     t.string "name", null: false
     t.integer "fee", default: 0, null: false
-    t.integer "time_requires", null: false
+    t.integer "time_required", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  add_foreign_key "foods", "resturants"
+  add_foreign_key "foods", "restaurants"
   add_foreign_key "line_foods", "foods"
   add_foreign_key "line_foods", "orders"
   add_foreign_key "line_foods", "restaurants"
