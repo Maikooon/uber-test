@@ -1,9 +1,18 @@
-import React, { Fragment, useEffect } from 'react';
-// import { fetchRestaurants } from '../apis/restaurants';
+// --- useReducerを追加 ---
+import React, { Fragment, useReducer, useEffect } from 'react';
 import styled from 'styled-components';
 
 // apis
 import { fetchRestaurants } from '../apis/restaurants';
+
+// --- ここから追加 ---
+// reducers
+import {
+  initialState,
+  restaurantsActionTypes,
+  restaurantsReducer,
+} from '../reducers/restaurants';
+// --- ここまで追加 ---
 
 // images
 import MainLogo from '../images/logo.png';
@@ -28,22 +37,40 @@ const MainCover = styled.img`
 `;
 
 export const Restaurants = () => {
-    useEffect(() => {
-        fetchRestaurants()
-            .then((data) =>
-                console.log(data)
-            )
-    }, [])
+  // --- ここから修正 ---
+  const [state, dispatch] = useReducer(restaurantsReducer, initialState);
 
-    return (
-        <Fragment>
-            <HeaderWrapper>
-                <MainLogoImage src={MainLogo} alt="main logo" />
-            </HeaderWrapper>
-            <MainCoverImageWrapper>
-                <MainCover src={MainCoverImage} alt="main cover" />
-            </MainCoverImageWrapper>
-        </Fragment>
-    )
+  useEffect(() => {
+    dispatch({ type: restaurantsActionTypes.FETCHING });
+    fetchRestaurants()
+      .then((data) =>
+        dispatch({
+          type: restaurantsActionTypes.FETCH_SUCCESS,
+          payload: {
+            restaurants: data.restaurants
+          }
+        })
+      )
+  }, [])
+  // --- ここまで修正 ---
+
+  return (
+    <Fragment>
+      <HeaderWrapper>
+        <MainLogoImage src={MainLogo} alt="main logo" />
+      </HeaderWrapper>
+      <MainCoverImageWrapper>
+        <MainCover src={MainCoverImage} alt="main cover" />
+      </MainCoverImageWrapper>
+      // --- ここから追加 ---
+      {
+        state.restaurantsList.map(restaurant =>
+          <div>
+            {restaurant.name}
+          </div>
+        )
+      }
+      // --- ここまで追加 ---
+    </Fragment>
+  )
 }
-
