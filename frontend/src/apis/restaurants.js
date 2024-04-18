@@ -10,3 +10,12 @@ export const fetchRestaurants = () => {
         // 例外処理を行う
         .catch((e) => console.error(e))
 }
+
+
+export const RestaurantsContents = () => {
+    return (
+        <div>
+            {/* コンポーネントの内容 */}
+        </div>
+    );
+};
